@@ -97,21 +97,27 @@ class EntityCategorizer(TrainablePipe):
         self.set_annotations([doc], predictions)
         return doc
 
-    def predict(self, docs: Iterable[Doc]) -> (Ints1d, Ints1d, Floats2d):
-        """Apply the pipeline's model to a batch of docs, without modifying them."""
-        # DONE
-        instances = [
-            set(
-                [span for span in doc.ents if span.label in self.filter_ents_labels]
+    def get_instances(self, docs: Iterable[Doc]):
+        return [
+            list(set(
+                [
+                    span
+                    for span in doc.ents
+                    if span.label in self.filter_ents_labels]
                 + [
                     span
                     for label in self.filter_spans_labels
                     for span in doc.spans[label]
                 ]
-            )
+            ))
             for doc in docs
         ]
-        scores = self.model.predict(docs, instances)
+
+    def predict(self, docs: Iterable[Doc]) -> (Ints1d, Ints1d, Floats2d):
+        """Apply the pipeline's model to a batch of docs, without modifying them."""
+        # DONE
+
+        scores = self.model.predict(docs, self.get_instances(docs))
         return self.model.ops.asarray(scores)
 
     def set_annotations(
@@ -122,7 +128,6 @@ class EntityCategorizer(TrainablePipe):
         c = 0
         docs = list(docs)
         doc_indices, begins, ends, scores = scores
-        get_instances = self.model.attrs["get_instances"]
         for (attr_key, attr_value), label_scores in zip(self.attrs, scores):
             keep = scores > 0
             for doc_idx, b, e, label_score in zip(
