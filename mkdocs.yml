@@ -87,6 +87,7 @@ nav:
     - utilities/tests/examples.md
     - utilities/matchers.md
   - Code Reference: reference/
+  - Coverage report: coverage.md
   - contributing.md
   - changelog.md
 
@@ -107,6 +108,7 @@ extra_javascript:
 
 plugins:
   - search
+  - coverage
   - bibtex:
       bib_file: "docs/references.bib"
   - gen-files:
