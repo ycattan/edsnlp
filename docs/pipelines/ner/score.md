@@ -113,7 +113,7 @@ The configuration consists of 4 items:
 
 - `score_name`: The name of the score
 - `regex`: A list of regular expression to detect the score's mention
-- `after_extract`: A regular expression to extract the score's value after the score's mention
+- `value_extract`: A regular expression to extract the score's value in the context of the score's mention
 - `score_normalization`: A function name used to normalise the score's _raw_ value
 
 !!! note
@@ -149,7 +149,7 @@ def score_normalization(extracted_score):
 charlson_config = dict(
     score_name="charlson",
     regex=[r"charlson"],
-    after_extract=r"charlson.*[\n\W]*(\d+)",
+    value_extract=r"charlson.*[\n\W]*(\d+)",
     score_normalization="score_normalization.charlson",
 )
 ```
