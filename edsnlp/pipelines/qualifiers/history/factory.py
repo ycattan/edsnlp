@@ -1,4 +1,3 @@
-from datetime import timedelta
 from typing import List, Optional
 
 from spacy.language import Language
