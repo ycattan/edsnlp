@@ -34,8 +34,8 @@ class History(Qualifier):
     use_dates : bool
         Whether to use dates pipeline to detect if the event occurs
          a long time before the document date.
-    history_limit : timedelta
-        The time after which the event is considered as history.
+    history_limit : int
+        The number of days after which the event is considered as history.
     exclude_birthdate : bool
         Whether to exclude the birth date from history dates.
     attr : str
@@ -64,7 +64,7 @@ class History(Qualifier):
         termination: Optional[List[str]],
         use_sections: bool,
         use_dates: bool,
-        history_limit: timedelta,
+        history_limit: int,
         exclude_birthdate: bool,
         explain: bool,
         on_ents_only: bool,
@@ -85,7 +85,7 @@ class History(Qualifier):
 
         self.set_extensions()
 
-        self.history_limit = history_limit
+        self.history_limit = timedelta(history_limit)
         self.exclude_birthdate = exclude_birthdate
 
         self.sections = use_sections and (
@@ -300,12 +300,22 @@ class History(Qualifier):
                                 Span(doc, date.start, date.end, label="relative_date")
                             )
                 elif date.label_ == "absolute" and doc._.note_datetime:
-                    absolute_date = date._.date.to_datetime(
-                        note_datetime=note_datetime,
-                        infer_from_context=True,
-                        tz="Europe/Paris",
-                        default_day=15,
-                    )
+                    try:
+                        absolute_date = date._.date.to_datetime(
+                            note_datetime=note_datetime,
+                            infer_from_context=True,
+                            tz="Europe/Paris",
+                            default_day=15,
+                        )
+                    except ValueError as e:
+                        absolute_date = None
+                        logger.warning(
+                            "In doc {}, the following date {} raises this error: {}. "
+                            "Skipping this date.",
+                            doc._.note_id,
+                            date._.date,
+                            e,
+                        )
                     if absolute_date:
                         if note_datetime.diff(absolute_date) < self.history_limit:
                             recent_dates.append(

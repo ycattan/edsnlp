@@ -30,7 +30,6 @@ The following snippet matches a simple terminology, and checks whether the extra
 
 ```python
 import spacy
-from datetime import timedelta
 
 nlp = spacy.blank("fr")
 nlp.add_pipe("eds.sentences")
@@ -88,7 +87,7 @@ The pipeline can be configured using the following parameters :
 | `termination`       | Termination patterns (for syntagma/proposition extraction)                                                 | `None` (use pre-defined patterns) |
 | `use_sections`      | Whether to use pre-annotated sections (requires the `sections` pipeline)                                   | `False`                           |
 | `use_dates`         | Whether to use dates pipeline (requires the `dates` pipeline and ``note_datetime`` context is recommended) | `False`                           |
-| `history_limit`     | If `use_dates = True`. The time after which the event is considered as history.                            | `timedelta(14)` (2 weeks)         |
+| `history_limit`     | If `use_dates = True`. The number of days after which the event is considered as history.                  | `14` (2 weeks)                    |
 | `exclude_birthdate` | If `use_dates = True`. Whether to exclude the birth date from history dates.                               | `True`                            |
 | `on_ents_only`      | Whether to qualify pre-extracted entities only                                                             | `True`                            |
 | `explain`           | Whether to keep track of the cues for each entity                                                          | `False`                           |
