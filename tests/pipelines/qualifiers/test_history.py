@@ -1,10 +1,11 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import spacy
 from pytest import mark
 
 from edsnlp.pipelines.qualifiers.history import History
 from edsnlp.pipelines.qualifiers.history.patterns import history
+from edsnlp.pipelines.terminations import termination
 
 text = """COMPTE RENDU D'HOSPITALISATION du 11/07/2018 au 12/07/2018
 
@@ -55,11 +56,12 @@ def test_history(lang, use_sections, use_dates, exclude_birthdate, on_ents_only)
         nlp=nlp,
         attr="NORM",
         history=history,
-        termination=[],
+        termination=termination,
         use_sections=use_sections,
         use_dates=use_dates,
         exclude_birthdate=exclude_birthdate,
-        history_limit=timedelta(15),
+        closest_dates_only=True,
+        history_limit=15,
         explain=True,
         on_ents_only=on_ents_only,
     )

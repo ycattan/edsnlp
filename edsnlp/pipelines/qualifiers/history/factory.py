@@ -14,6 +14,7 @@ DEFAULT_CONFIG = dict(
     use_dates=False,
     history_limit=14,
     exclude_birthdate=True,
+    closest_dates_only=True,
     explain=False,
     on_ents_only=True,
 )
@@ -51,6 +52,7 @@ def create_component(
     use_dates: bool,
     history_limit: int,
     exclude_birthdate: bool,
+    closest_dates_only: bool,
     attr: str,
     explain: bool,
     on_ents_only: bool,
@@ -64,6 +66,7 @@ def create_component(
         use_dates=use_dates,
         history_limit=history_limit,
         exclude_birthdate=exclude_birthdate,
+        closest_dates_only=closest_dates_only,
         explain=explain,
         on_ents_only=on_ents_only,
     )
