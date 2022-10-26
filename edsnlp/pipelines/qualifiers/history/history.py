@@ -305,12 +305,22 @@ class History(Qualifier):
                                 Span(doc, date.start, date.end, label="relative_date")
                             )
                 elif date.label_ == "absolute" and doc._.note_datetime:
-                    absolute_date = date._.date.to_datetime(
-                        note_datetime=note_datetime,
-                        infer_from_context=True,
-                        tz="Europe/Paris",
-                        default_day=15,
-                    )
+                    try:
+                        absolute_date = date._.date.to_datetime(
+                            note_datetime=note_datetime,
+                            infer_from_context=True,
+                            tz="Europe/Paris",
+                            default_day=15,
+                        )
+                    except ValueError as e:
+                        absolute_date = None
+                        logger.warning(
+                            "In doc {}, the following date {} raises this error: {}. "
+                            "Skipping this date.",
+                            doc._.note_id,
+                            date._.date,
+                            e,
+                        )
                     if absolute_date:
                         if note_datetime.diff(absolute_date) < self.history_limit:
                             recent_dates.append(
