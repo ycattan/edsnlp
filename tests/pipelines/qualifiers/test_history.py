@@ -10,7 +10,7 @@ from edsnlp.pipelines.terminations import termination
 text = """COMPTE RENDU D'HOSPITALISATION du 11/07/2018 au 12/07/2018
 
 MOTIF D'HOSPITALISATION
-Monsieur Dupont Jean Michel, de sexe masculin, âgée de 39 ans,
+Monsieur Dupont 30\n2 Jean Michel, de sexe masculin, âgée de 39 ans,
 née le 23/11/1978, est admis pour une toux.
 Il a été hospitalisé du 11/08/2019 au 17/08/2019,
 avec un antécédent d'asthme il y a 25 jours.
