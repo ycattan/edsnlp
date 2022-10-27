@@ -136,6 +136,7 @@ following: List[str] = [
 ]
 
 verbs: List[str] = [
+    "écarter",
     "éliminer",
     "exclure",
     "interdire",
