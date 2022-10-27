@@ -82,8 +82,7 @@ class Sections(GenericMatcher):
             for k, v in sections.items():
 
                 sections[k] = [
-                    r"(?<=(?:\n|^)[^\n]{0,5})" + ent + r"(?=[^\n]{0,5}[\n|:])"
-                    for ent in v
+                    r"(?<=(?:\n|^)[^\n]{0,5})" + ent + r"(?=[^\n]{0,5}\n)" for ent in v
                 ]
 
         super().__init__(

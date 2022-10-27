@@ -236,7 +236,7 @@ class History(Qualifier):
             note_datetime = note_datetime.set(tz="Europe/Paris")
         except ValueError:
             logger.debug(
-                "Note date time must be datetime objects. Skkipping absolut value"
+                "Note date time must be datetime objects. Skkipping absolute value"
             )
             note_datetime = None
 
