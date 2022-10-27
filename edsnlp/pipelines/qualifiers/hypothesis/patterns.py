@@ -45,6 +45,7 @@ preceding: List[str] = [
     "peut correspondre",
     "peut-être",
     "peuvent correspondre",
+    "possibilité",
     "possible",
     "possiblement",
     "potentiel",
@@ -91,14 +92,13 @@ following: List[str] = [
     "pas évidente",
     "pas sûr",
     "pas sûre",
+    "possibilité",
     "possible",
     "potentiel",
     "potentielle",
     "potentiels",
     "probable",
     "probables",
-    ": \n",
-    ":\n",
 ]
 
 verbs_hyp: List[str] = [
