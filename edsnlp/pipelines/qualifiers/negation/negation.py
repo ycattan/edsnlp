@@ -169,6 +169,7 @@ class Negation(Qualifier):
             ((neg_verbs["mode"] == "Indicatif") & (neg_verbs["tense"] == "Présent"))
             | (neg_verbs["tense"] == "Participe Présent")
             | (neg_verbs["tense"] == "Participe Passé")
+            | (neg_verbs["tense"] == "Infinitif Présent")
         ]
         neg_verbs_following = neg_verbs.loc[neg_verbs["tense"] == "Participe Passé"]
         list_neg_verbs_preceding = list(neg_verbs_preceding["term"].unique())
