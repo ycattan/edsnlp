@@ -18,7 +18,9 @@ avec un antécédent d'asthme il y a 25 jours.
 ANTÉCÉDENTS
 Antécédents médicaux :
 Premier épisode: il a été hospitalisé pour asthme cette semaine-ci,
-il y a 3 jours, le 13 août 2020."""
+il y a 3 jours, le 13 août 2020.
+Hier, le patient est venu pour une toux dont les symptômes,
+seraient apparus il y a 2 mois."""
 
 
 @mark.parametrize("use_sections", [True, False])

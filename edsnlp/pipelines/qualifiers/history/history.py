@@ -10,7 +10,7 @@ from edsnlp.pipelines.qualifiers.base import Qualifier
 from edsnlp.pipelines.terminations import termination
 from edsnlp.utils.deprecation import deprecated_getter_factory
 from edsnlp.utils.filter import consume_spans, filter_spans, get_spans
-from edsnlp.utils.inclusion import check_inclusion
+from edsnlp.utils.inclusion import check_inclusion, check_sent_inclusion
 
 from .patterns import history, sections_history
 
@@ -353,12 +353,12 @@ class History(Qualifier):
             if self.dates:
                 sub_recent_dates, recent_dates = consume_spans(
                     recent_dates,
-                    lambda s: s.sent.start < end <= s.sent.end,
+                    lambda s: check_sent_inclusion(s, start, end),
                     sub_recent_dates,
                 )
                 sub_history_dates, history_dates = consume_spans(
                     history_dates,
-                    lambda s: s.sent.start < end <= s.sent.end,
+                    lambda s: check_sent_inclusion(s, start, end),
                     sub_history_dates,
                 )
 
@@ -371,14 +371,47 @@ class History(Qualifier):
                             for recent_date in sub_recent_dates
                             if check_inclusion(recent_date, start, end)
                         ]
-                        if not close_recent_dates:
+                        if sub_history_dates:
+                            close_history_dates = [
+                                history_date
+                                for history_date in sub_history_dates
+                                if check_inclusion(history_date, start, end)
+                            ]
+                            if not close_recent_dates and not close_history_dates:
+                                min_distance_recent_date = min(
+                                    [
+                                        abs(sub_recent_date.start - start)
+                                        for sub_recent_date in sub_recent_dates
+                                    ]
+                                )
+                                min_distance_history_date = min(
+                                    [
+                                        abs(sub_history_date.start - start)
+                                        for sub_history_date in sub_history_dates
+                                    ]
+                                )
+                                if min_distance_recent_date < min_distance_history_date:
+                                    close_recent_dates = [
+                                        min(
+                                            sub_recent_dates,
+                                            key=lambda x: abs(x.start - start),
+                                        )
+                                    ]
+                                else:
+                                    close_history_dates = [
+                                        min(
+                                            sub_history_dates,
+                                            key=lambda x: abs(x.start - start),
+                                        )
+                                    ]
+                        elif not close_recent_dates:
                             close_recent_dates = [
                                 min(
-                                    sub_recent_dates, key=lambda x: abs(x.start - start)
+                                    sub_recent_dates,
+                                    key=lambda x: abs(x.start - start),
                                 )
                             ]
-
-                    if sub_history_dates:
+                    elif sub_history_dates:
                         close_history_dates = [
                             history_date
                             for history_date in sub_history_dates
