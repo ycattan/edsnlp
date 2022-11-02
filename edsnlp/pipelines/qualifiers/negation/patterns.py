@@ -5,7 +5,7 @@ pseudo: List[str] = [
     "aucun doute",
     "aucune hésitation",
     "aucune diminution",
-    "ne permet pas d",
+    "ne permet pas d'",
     "ne permet pas de",
     "n'exclut pas",
     "non négligeable",
