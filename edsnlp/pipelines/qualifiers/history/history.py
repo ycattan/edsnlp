@@ -362,6 +362,7 @@ class History(Qualifier):
                     sub_history_dates,
                 )
 
+                # Filter dates inside the boundaries only
                 if self.closest_dates_only:
                     close_recent_dates = []
                     close_history_dates = []
@@ -377,6 +378,7 @@ class History(Qualifier):
                                 for history_date in sub_history_dates
                                 if check_inclusion(history_date, start, end)
                             ]
+                            # If no date inside the boundaries, get the closest
                             if not close_recent_dates and not close_history_dates:
                                 min_distance_recent_date = min(
                                     [
@@ -417,6 +419,7 @@ class History(Qualifier):
                             for history_date in sub_history_dates
                             if check_inclusion(history_date, start, end)
                         ]
+                        # If no date inside the boundaries, get the closest
                         if not close_history_dates:
                             close_history_dates = [
                                 min(
