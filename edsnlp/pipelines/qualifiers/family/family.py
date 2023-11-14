@@ -108,7 +108,7 @@ class FamilyContextQualifier(RuleBasedQualifier):
         family: Optional[List[str]] = None,
         termination: Optional[List[str]] = None,
         use_sections: bool = True,
-        span_getter: SpanGetterArg = None,
+        span_getter: Union[bool, SpanGetterArg] = None,
         on_ents_only: Union[bool, str, List[str], Set[str]] = None,
         explain: bool = False,
     ):
@@ -168,7 +168,7 @@ class FamilyContextQualifier(RuleBasedQualifier):
         # Removes duplicate matches and pseudo-expressions in one statement
         matches = filter_spans(matches, label_to_remove="pseudo")
 
-        entities = list(get_spans(doc, self.span_getter))
+        entities = list(get_spans(doc, self.span_getter or {"ents": True}))
         ents = None
 
         sections = []

@@ -1,3 +1,4 @@
+import warnings
 from itertools import chain
 from typing import Dict, List, Optional, Set, Union
 
@@ -7,7 +8,12 @@ from spacy.tokens import Doc, Span
 
 from edsnlp.matchers.phrase import EDSPhraseMatcher
 from edsnlp.matchers.regex import RegexMatcher
-from edsnlp.pipelines.base import BaseComponent, SpanGetterArg, validate_span_getter
+from edsnlp.pipelines.base import (
+    BaseComponent,
+    SpanGetterArg,
+    get_spans,
+    validate_span_getter,
+)
 
 
 def check_normalizer(nlp: Language) -> None:
@@ -69,7 +75,7 @@ class RuleBasedQualifier(BaseComponent):
         name: Optional[str] = None,
         *,
         attr: str,
-        span_getter: SpanGetterArg,
+        span_getter: Union[bool, SpanGetterArg],
         on_ents_only: Union[bool, str, List[str], Set[str]],
         explain: bool,
         terms: Dict[str, Optional[List[str]]],
@@ -88,22 +94,33 @@ class RuleBasedQualifier(BaseComponent):
 
         self.on_ents_only = on_ents_only
 
+        if on_ents_only is not None:
+            warnings.warn(
+                "The `on_ents_only` argument is deprecated."
+                " Use the `span_getter` argument instead.",
+                DeprecationWarning,
+            )
+
+        assert not ((on_ents_only is not None) and (span_getter is not None)), (
+            "Cannot use both `on_ents_only` and " "`span_getter`"
+        )
+
         if span_getter is None and on_ents_only is None:
-            on_ents_only = True
-
-        if on_ents_only:
-            assert isinstance(on_ents_only, (list, str, set, bool)), (
-                "The `on_ents_only` argument should be a "
-                "string, a bool, a list or a set of string"
-            )
-
-            assert span_getter is None, (
-                "Cannot use both `on_ents_only` and " "`span_getter`"
-            )
-            span_getter = "ents" if on_ents_only is True else on_ents_only
-        else:
             span_getter = "ents"
-        self.span_getter = validate_span_getter(span_getter)
+
+        if (span_getter is False) or (on_ents_only is False):
+            self.span_getter = False
+
+        else:
+            if on_ents_only:
+                assert isinstance(on_ents_only, (list, str, set, bool)), (
+                    "The `on_ents_only` argument should be a "
+                    "string, a bool, a list or a set of string"
+                )
+
+                span_getter = "ents" if on_ents_only is True else on_ents_only
+
+            self.span_getter = validate_span_getter(span_getter)
         self.explain = explain
 
     def get_matches(self, doc: Doc) -> List[Span]:
@@ -120,8 +137,8 @@ class RuleBasedQualifier(BaseComponent):
             List of detected spans
         """
 
-        if self.on_ents_only:
-            sents = set([ent.sent for ent in self.get_spans(doc)])
+        if self.span_getter:
+            sents = set([ent.sent for ent in get_spans(doc, self.span_getter)])
 
             match_iterator = (
                 (

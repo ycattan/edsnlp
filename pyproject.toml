@@ -33,7 +33,7 @@ dev = [
     "black>=22.3.0,<23.0.0",
     "fastapi",
     "flake8==3.9.2",
-    "koalas>=1.8.1; python_version<='3.10'",
+    # "koalas>=1.8.1; python_version<='3.10'",
     "pre-commit>=2.0.0; python_version<'3.8'",
     "pre-commit>=2.21.0; python_version>='3.8'",
     "pyspark",

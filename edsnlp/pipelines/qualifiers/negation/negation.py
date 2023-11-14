@@ -150,7 +150,7 @@ class NegationQualifier(RuleBasedQualifier):
         verbs: Optional[List[str]] = None,
         termination: Optional[List[str]] = None,
         attr: str = "NORM",
-        span_getter: SpanGetterArg = None,
+        span_getter: Union[bool, SpanGetterArg] = None,
         on_ents_only: Union[bool, str, List[str], Set[str]] = None,
         within_ents: bool = False,
         explain: bool = False,
@@ -252,7 +252,7 @@ class NegationQualifier(RuleBasedQualifier):
         # Removes duplicate matches and pseudo-expressions in one statement
         matches = filter_spans(matches, label_to_remove="pseudo")
 
-        entities = list(get_spans(doc, self.span_getter))
+        entities = list(get_spans(doc, self.span_getter or {"ents": True}))
         ents = None
 
         for start, end in boundaries:
