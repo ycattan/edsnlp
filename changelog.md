@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.10.1
+
+### Fixed
+
+- The Span value extension is not more forcibly overwritten, and user assigned values are returned by `Span._.value` in priority, before the aggregated `span._.get(span.label_)` getter result (#220)
+
 ## v0.10.0
 
 ### Added
