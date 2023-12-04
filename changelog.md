@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.10.1
+
+### Fixed
+
+- TNM scores followed by a space are now correctly detected
+
 ## v0.10.0
 
 ### Added
