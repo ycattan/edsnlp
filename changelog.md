@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.10.1
+
+### Fixed
+
+- `RegexMatcher` now supports all alignment modes (`strict`, `expand`, `contract`) and better handles partial doc matching (#201).
+
 ## v0.10.0
 
 ### Added
