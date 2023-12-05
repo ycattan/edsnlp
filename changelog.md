@@ -2,6 +2,10 @@
 
 ## v0.10.1
 
+### Changed
+
+- Small regex matching performance improvement, up to 1.25x faster (e.g. `eds.measurements`)
+
 ### Fixed
 
 - `RegexMatcher` now supports all alignment modes (`strict`, `expand`, `contract`) and better handles partial doc matching (#201).
